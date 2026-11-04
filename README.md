@@ -1,19 +1,21 @@
-# Pocket Plan
+# CreditPulse
 
-A responsive personal-finance PWA prototype for the GEAP 103 class project. It uses fictional sample figures and stores saved changes in this browser's local storage. It does not connect to a bank, upload statement data, or provide financial advice.
+CreditPulse is a class demo for the GEAP 103 project. It starts with no accounts and no transactions. All totals start at $0. Add example information to show how the app works.
 
-## Run it
+## Important
 
-Open `index.html` for a quick local preview. To enable install and offline caching, serve this folder from localhost or a secure HTTPS host. For example, from this folder run `python3 -m http.server 8000`, then visit `http://localhost:8000` and reload once while online. Use your browser's install or add-to-home-screen option on a supported device.
+This is a public class demo, not a private finance app. The app saves information in the browser on the device. It does not send information to a bank or to a server. Do not enter real private financial information. If you show the app on your own device, other people using that same browser may see the information you entered.
 
-## What is included
+## Open the app
 
-- Monthly income, budgeted spending, savings capacity, a cash-flow overview, and upcoming credit-card payment reminders.
-- Debit cards, credit cards, and credit lines; credit cards show current debt, minimum due, statement balance, and due date.
-- Editable transactions with categories, plus CSV and PDF statement upload into a review table. CSV files with date, description, and amount columns are parsed in the browser. PDF statements are previewed locally; enter or correct their transactions in the review table before saving because automatic PDF text extraction is not included.
-- A savings allocation calculator with an adjustable percentage.
-- English and Spanish interface labels, local storage, and a service worker that caches the app shell for offline use after first load.
+Open `index.html` for a quick preview. To use the install and offline features, serve this folder from localhost or a secure website. For example, run `python3 -m http.server 8000` in this folder and open `http://localhost:8000`. Load it once while online to save the app for offline use.
 
-## CSV format
+## What you can show
 
-Use a header row with `date`, `description` (or `merchant`), and `amount`. Optional `category` values can prefill supported categories. Amounts are treated as expenses; review every row, category, sign, and account before saving.
+- Add debit cards, credit cards, and credit lines.
+- Add, edit, and delete transactions.
+- Import a CSV or PDF statement and review rows before saving.
+- Change the savings percentage.
+- Switch between English and Spanish.
+
+CSV files need a header row with `date`, `description` (or `merchant`), and `amount`. PDF statements can be previewed, but you must enter their transactions in the review table yourself.

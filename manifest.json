@@ -1,7 +1,7 @@
 {
-  "name": "Pocket Plan — personal finance",
-  "short_name": "Pocket Plan",
-  "description": "A calm, private place to plan your monthly money.",
+  "name": "CreditPulse — class demo",
+  "short_name": "CreditPulse",
+  "description": "A simple classroom demo for planning and understanding money.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

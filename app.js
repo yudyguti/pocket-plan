@@ -1,4 +1,4 @@
-const STORAGE_KEY = "pocket-plan-v1";
+const STORAGE_KEY = "creditpulse-class-demo-v1";
 const translations = {
   en: {
     workspace:"WORKSPACE", overview:"Overview", accounts:"Accounts", transactions:"Transactions", savingsPlanner:"Savings planner",
@@ -19,7 +19,7 @@ const translations = {
     plannedExpenses:"Planned expenses", savingsAllocation:"Savings allocation", flexibleMoney:"Flexible money", aGentleReminder:"A GENTLE REMINDER",
     smallStepsAddUp:"Small steps add up.", savingsTip:"Even a small, regular contribution can help you build a cushion over time. Choose an amount that feels realistic for your budget.",
     yourPlanStaysPrivate:"Your plan is private and stays on this device.", plannerDisclaimer:"This is an illustrative planning tool, not financial advice. Adjust the suggested amount to fit your needs.",
-    privateByDesign:"Private by design", yourMoneyYourWay:"YOUR MONEY, YOUR WAY", cancel:"Cancel", saveTransaction:"Save transaction", type:"Type", expense:"Expense",
+    classDemo:"Class demo", yourMoneyYourWay:"YOUR MONEY, YOUR WAY", cancel:"Cancel", saveTransaction:"Save transaction", type:"Type", expense:"Expense",
     accountName:"Account name", accountType:"Account type", debitCard:"Debit card", creditCard:"Credit card", creditLine:"Credit line", balance:"Balance",
     creditLimitOptional:"Credit limit (optional)", minimumPayment:"Minimum payment", dueDate:"Due date", statementBalanceOptional:"Statement balance (optional)",
     accountHint:"For credit cards, statement balance is what to pay to avoid interest; minimum payment is the minimum due.", saveAccount:"Save account",
@@ -53,7 +53,7 @@ const translations = {
     plannedExpenses:"Gastos previstos", savingsAllocation:"Ahorro asignado", flexibleMoney:"Dinero flexible", aGentleReminder:"UN RECORDATORIO AMABLE",
     smallStepsAddUp:"Cada pequeño paso cuenta.", savingsTip:"Incluso una contribución pequeña y constante puede ayudarte a crear un fondo con el tiempo. Elige un monto realista para tu presupuesto.",
     yourPlanStaysPrivate:"Tu plan es privado y se guarda en este dispositivo.", plannerDisclaimer:"Esta es una herramienta ilustrativa, no asesoría financiera. Ajusta el monto sugerido según tus necesidades.",
-    privateByDesign:"Privacidad desde el diseño", yourMoneyYourWay:"TU DINERO, A TU MANERA", cancel:"Cancelar", saveTransaction:"Guardar transacción", type:"Tipo", expense:"Gasto",
+    classDemo:"Demostración de clase", yourMoneyYourWay:"TU DINERO, A TU MANERA", cancel:"Cancelar", saveTransaction:"Guardar transacción", type:"Tipo", expense:"Gasto",
     accountName:"Nombre de cuenta", accountType:"Tipo de cuenta", debitCard:"Tarjeta de débito", creditCard:"Tarjeta de crédito", creditLine:"Línea de crédito", balance:"Saldo",
     creditLimitOptional:"Límite de crédito (opcional)", minimumPayment:"Pago mínimo", dueDate:"Fecha de vencimiento", statementBalanceOptional:"Saldo del estado de cuenta (opcional)",
     accountHint:"En tarjetas de crédito, el saldo del estado de cuenta es lo que debes pagar para evitar intereses; el pago mínimo es el mínimo requerido.", saveAccount:"Guardar cuenta",
@@ -77,30 +77,10 @@ const categories = [
   {id:"other",en:"Other",es:"Otros"}
 ];
 const currentMonth = new Date();
-const monthISO = (day) => `${currentMonth.getFullYear()}-${String(currentMonth.getMonth()+1).padStart(2,"0")}-${String(Math.min(day,currentMonth.getDate())).padStart(2,"0")}`;
-const dateISO = (dayOffset) => {
-  const date = new Date();
-  date.setDate(date.getDate() + dayOffset);
-  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
-};
 const defaultData = () => ({
   language:"en", savingsRate:20,
-  accounts:[
-    {id:"ac-checking",name:"Everyday checking",type:"debit",balance:4280.50},
-    {id:"ac-credit",name:"Everyday rewards",type:"credit",balance:1240.00,limit:5000,minimum:45,statement:980,due:dateISO(4)},
-    {id:"ac-travel",name:"Travel card",type:"credit",balance:865.25,limit:3500,minimum:35,statement:765,due:dateISO(10)},
-    {id:"ac-line",name:"Personal credit line",type:"line",balance:2100,limit:10000}
-  ],
-  transactions:[
-    {id:"tx1",date:monthISO(4),description:"Grocery market",category:"groceries",accountId:"ac-checking",amount:84.23,type:"expense"},
-    {id:"tx2",date:monthISO(1),description:"Monthly salary",category:"income",accountId:"ac-checking",amount:4800,type:"income"},
-    {id:"tx3",date:monthISO(3),description:"City electric",category:"utilities",accountId:"ac-checking",amount:76.80,type:"expense"},
-    {id:"tx4",date:monthISO(4),description:"Neighborhood cafe",category:"dining",accountId:"ac-checking",amount:18.50,type:"expense"},
-    {id:"tx5",date:monthISO(2),description:"Monthly rent",category:"housing",accountId:"ac-checking",amount:1450,type:"expense"},
-    {id:"tx6",date:monthISO(2),description:"Metro transit",category:"transport",accountId:"ac-checking",amount:42,type:"expense"},
-    {id:"tx7",date:monthISO(3),description:"Health pharmacy",category:"health",accountId:"ac-credit",amount:32.75,type:"expense"},
-    {id:"tx8",date:monthISO(1),description:"Streaming subscription",category:"subscriptions",accountId:"ac-credit",amount:12.99,type:"expense"}
-  ]
+  accounts:[],
+  transactions:[]
 });
 
 let data;
@@ -109,7 +89,7 @@ try {
   data = saved ? {...defaultData(),...JSON.parse(saved)} : defaultData();
   if (!Array.isArray(data.accounts) || !Array.isArray(data.transactions)) data = defaultData();
 } catch (error) {
-  console.error("Could not load Pocket Plan data.", error);
+  console.error("Could not load CreditPulse data.", error);
   data = defaultData();
 }
 let importRows = [];
@@ -120,7 +100,7 @@ const t = (key) => translations[data.language]?.[key] || translations.en[key] ||
 const byId = (id) => document.getElementById(id);
 function saveData() {
   try { localStorage.setItem(STORAGE_KEY,JSON.stringify(data)); }
-  catch(error) { console.error("Could not save Pocket Plan data.",error); showToast("Could not save. Check device storage."); }
+  catch(error) { console.error("Could not save CreditPulse data.",error); showToast("Could not save. Check device storage."); }
 }
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g,(char)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
