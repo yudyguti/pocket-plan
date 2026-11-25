@@ -8,7 +8,7 @@ const translations = {
     savingsCapacity:"Savings capacity", vsLastMonth:"vs. last month", ofMonthlyIncome:"of monthly income", afterPlannedExpenses:"After planned expenses", youreOnTrack:"You're on track",
     monthlyCashFlow:"Monthly cash flow", incomeVsSpending:"Income vs. spending", income:"Income", spending:"Spending", comingUp:"Coming up", paymentDueDates:"Payment due dates",
     viewAllPayments:"View all payments", yourAccounts:"Your accounts", accountsOverview:"A quick overview", seeAll:"See all", savingsGoal:"Savings goal",
-    monthlyTarget:"Your monthly target", perMonth:"/ month", adjustYourPlan:"Adjust your plan", demoDisclaimer:"Demo figures are examples only. This app does not connect to a bank or provide financial advice.",
+    monthlyTarget:"Your monthly target", perMonth:"/ month", adjustYourPlan:"Adjust your plan", demoDisclaimer:"This is a class example. Use sample information only. This app does not connect to a bank.", addExample:"Add example", resetToZero:"Reset to $0",
     yourFinancialPicture:"YOUR FINANCIAL PICTURE", accountsSubtitle:"Keep balances and payment details together.", addAccount:"Add account", debitCards:"Debit cards",
     availableBalance:"Available balance", creditCards:"Credit cards", debtAndPaymentDetails:"Debt and payment details", creditLines:"Credit lines", availableCredit:"Available credit",
     everyLittleDetail:"EVERY LITTLE DETAIL", transactionsSubtitle:"Review spending or import a statement to get started.", importStatement:"Import statement", searchTransactions:"Search transactions",
@@ -31,7 +31,7 @@ const translations = {
     chooseValidFile:"Choose a CSV or PDF file.", fileReadError:"This file could not be read.", csvNoRows:"No transaction rows found. Add rows below.",
     pdfReview:"PDF selected. Review the preview and add or correct transactions below; automatic text extraction is not supported.",
     csvFound:"Rows loaded for review. Check the details and categories before saving.", noAccount:"Add an account first to save transactions.",
-    confirmDelete:"Delete this transaction?", accountPlaceholder:"Choose account", categoryPlaceholder:"Choose category", missingRequired:"Fill in the required fields.",
+    confirmDelete:"Delete this transaction?", confirmReset:"Remove all example data and return to $0?", exampleAdded:"Example information added.", dataReset:"All example information was removed.", accountPlaceholder:"Choose account", categoryPlaceholder:"Choose category", missingRequired:"Fill in the required fields.",
     edit:"Edit", delete:"Delete", incomeType:"Income", expenseType:"Expense", deleteRow:"Remove row", accountSaved:"Account saved"
   },
   es: {
@@ -42,7 +42,7 @@ const translations = {
     savingsCapacity:"Capacidad de ahorro", vsLastMonth:"vs. mes pasado", ofMonthlyIncome:"de los ingresos mensuales", afterPlannedExpenses:"Después de los gastos previstos", youreOnTrack:"Vas por buen camino",
     monthlyCashFlow:"Flujo de caja mensual", incomeVsSpending:"Ingresos vs. gastos", income:"Ingresos", spending:"Gastos", comingUp:"Próximos pagos", paymentDueDates:"Fechas de pago",
     viewAllPayments:"Ver todos los pagos", yourAccounts:"Tus cuentas", accountsOverview:"Un resumen rápido", seeAll:"Ver todas", savingsGoal:"Meta de ahorro",
-    monthlyTarget:"Tu meta mensual", perMonth:"/ mes", adjustYourPlan:"Ajustar tu plan", demoDisclaimer:"Las cifras de ejemplo son ilustrativas. Esta app no se conecta a bancos ni ofrece asesoría financiera.",
+    monthlyTarget:"Tu meta mensual", perMonth:"/ mes", adjustYourPlan:"Ajustar tu plan", demoDisclaimer:"Este es un ejemplo para la clase. Usa solo datos de ejemplo. La app no se conecta a bancos.", addExample:"Agregar ejemplo", resetToZero:"Volver a $0",
     yourFinancialPicture:"TU SITUACIÓN FINANCIERA", accountsSubtitle:"Mantén juntos tus saldos y fechas de pago.", addAccount:"Agregar cuenta", debitCards:"Tarjetas de débito",
     availableBalance:"Saldo disponible", creditCards:"Tarjetas de crédito", debtAndPaymentDetails:"Deuda y detalles de pago", creditLines:"Líneas de crédito", availableCredit:"Crédito disponible",
     everyLittleDetail:"CADA DETALLE CUENTA", transactionsSubtitle:"Revisa tus gastos o importa un estado de cuenta.", importStatement:"Importar estado de cuenta", searchTransactions:"Buscar transacciones",
@@ -65,7 +65,7 @@ const translations = {
     chooseValidFile:"Elige un archivo CSV o PDF.", fileReadError:"No se pudo leer este archivo.", csvNoRows:"No se encontraron transacciones. Agrega filas abajo.",
     pdfReview:"PDF seleccionado. Revisa la vista previa y agrega o corrige transacciones abajo; no se admite la extracción automática de texto.",
     csvFound:"Filas cargadas para revisar. Verifica los detalles y las categorías antes de guardar.", noAccount:"Agrega una cuenta primero para guardar transacciones.",
-    confirmDelete:"¿Eliminar esta transacción?", accountPlaceholder:"Elige una cuenta", categoryPlaceholder:"Elige una categoría", missingRequired:"Completa los campos obligatorios.",
+    confirmDelete:"¿Eliminar esta transacción?", confirmReset:"¿Eliminar todos los datos de ejemplo y volver a $0?", exampleAdded:"Se agregaron datos de ejemplo.", dataReset:"Se eliminaron todos los datos de ejemplo.", accountPlaceholder:"Elige una cuenta", categoryPlaceholder:"Elige una categoría", missingRequired:"Completa los campos obligatorios.",
     edit:"Editar", delete:"Eliminar", incomeType:"Ingreso", expenseType:"Gasto", deleteRow:"Quitar fila", accountSaved:"Cuenta guardada"
   }
 };
@@ -77,10 +77,30 @@ const categories = [
   {id:"other",en:"Other",es:"Otros"}
 ];
 const currentMonth = new Date();
+const monthISO = (day) => `${currentMonth.getFullYear()}-${String(currentMonth.getMonth()+1).padStart(2,"0")}-${String(Math.min(day,new Date(currentMonth.getFullYear(),currentMonth.getMonth()+1,0).getDate())).padStart(2,"0")}`;
+const dateISO = (dayOffset) => {
+  const date = new Date();
+  date.setDate(date.getDate() + dayOffset);
+  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+};
 const defaultData = () => ({
   language:"en", savingsRate:20,
   accounts:[],
   transactions:[]
+});
+const exampleData = () => ({
+  accounts:[
+    {id:"example-checking",name:"Example checking",type:"debit",balance:3200},
+    {id:"example-card",name:"Example credit card",type:"credit",balance:850,limit:2000,minimum:35,statement:620,due:dateISO(7)},
+    {id:"example-line",name:"Example credit line",type:"line",balance:400,limit:1500}
+  ],
+  transactions:[
+    {id:"example-salary",date:monthISO(1),description:"Example monthly income",category:"income",accountId:"example-checking",amount:3600,type:"income"},
+    {id:"example-rent",date:monthISO(2),description:"Example rent",category:"housing",accountId:"example-checking",amount:1200,type:"expense"},
+    {id:"example-groceries",date:monthISO(3),description:"Example groceries",category:"groceries",accountId:"example-checking",amount:180,type:"expense"},
+    {id:"example-transit",date:monthISO(4),description:"Example transit",category:"transport",accountId:"example-checking",amount:45,type:"expense"},
+    {id:"example-purchase",date:monthISO(5),description:"Example card purchase",category:"shopping",accountId:"example-card",amount:65,type:"expense"}
+  ]
 });
 
 let data;
@@ -138,6 +158,9 @@ function render() {
   const totals=monthlyTotals();
   const capacity=Math.max(0,totals.income-totals.expenses);
   byId("current-month").textContent=monthLabel();
+  byId("class-demo-action").textContent=data.accounts.length||data.transactions.length?t("resetToZero"):t("addExample");
+  document.querySelector(".income-card .metric-caption").hidden=!totals.income&&!totals.expenses;
+  document.querySelector(".savings-note").hidden=!totals.income&&!totals.expenses;
   byId("income-total").textContent=money(totals.income);
   byId("expenses-total").textContent=money(totals.expenses);
   byId("savings-total").textContent=money(capacity);
@@ -379,6 +402,13 @@ byId("open-import").addEventListener("click",()=>{importRows=[];byId("import-rev
 byId("transaction-search").addEventListener("input",renderTransactions);
 byId("category-filter").addEventListener("change",renderTransactions);
 byId("savings-rate").addEventListener("input",event=>{data.savingsRate=Number(event.target.value);byId("savings-rate-label").textContent=data.savingsRate;const totals=monthlyTotals();byId("planner-savings").textContent=money(totals.income*data.savingsRate/100);byId("planner-allocation").textContent=money(totals.income*data.savingsRate/100);byId("planner-flexible").textContent=money(Math.max(0,totals.income-totals.expenses-totals.income*data.savingsRate/100));byId("goal-amount").textContent=money(totals.income*data.savingsRate/100);byId("goal-caption").textContent=`${data.savingsRate}% ${data.language==="es"?"de los ingresos mensuales":"of your monthly income"}`;byId("goal-progress").style.width=`${Math.min(100,totals.income?Math.max(0,totals.income-totals.expenses)/(totals.income*data.savingsRate/100)*100:0)}%`;saveData();});
+byId("class-demo-action").addEventListener("click",()=>{
+  if(data.accounts.length||data.transactions.length){
+    if(!window.confirm(t("confirmReset")))return;
+    data.accounts=[];data.transactions=[];data.savingsRate=20;saveData();render();showToast(t("dataReset"));return;
+  }
+  Object.assign(data,exampleData());saveData();render();showToast(t("exampleAdded"));
+});
 byId("transaction-form").addEventListener("submit",event=>{
   event.preventDefault();
   const description=byId("transaction-description").value.trim(),amount=Number(byId("transaction-amount").value),accountId=byId("transaction-account").value;

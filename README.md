@@ -1,6 +1,6 @@
 # CreditPulse
 
-CreditPulse is a class demo for the GEAP 103 project. It starts with no accounts and no transactions. All totals start at $0. Add example information to show how the app works.
+CreditPulse is a class demo for the GEAP 103 project. It starts with no accounts and no transactions. All totals start at $0. Choose **Add example** on the dashboard to add sample cards, income, and expenses. Choose **Reset to $0** when you want to show the empty app again.
 
 ## Important
 
