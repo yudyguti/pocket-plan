@@ -1,6 +1,6 @@
-# CreditPulse
+# Pocket Plan
 
-CreditPulse is a class demo for the GEAP 103 project. It starts with no accounts and no transactions. All totals start at $0. Add your own account, then enter your own transactions. The app does not add made-up example information.
+Pocket Plan is a class demo for the GEAP 103 project. It starts with no accounts and no transactions. All totals start at $0. Add your own account, then enter your own transactions. The app does not add made-up example information.
 
 ## Important
 

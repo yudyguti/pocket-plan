@@ -93,7 +93,7 @@ try {
   data = saved ? {...defaultData(),...JSON.parse(saved)} : defaultData();
   if (!Array.isArray(data.accounts) || !Array.isArray(data.transactions)) data = defaultData();
 } catch (error) {
-  console.error("Could not load CreditPulse data.", error);
+  console.error("Could not load Pocket Plan data.", error);
   data = defaultData();
 }
 let importRows = [];
@@ -104,7 +104,7 @@ const t = (key) => translations[data.language]?.[key] || translations.en[key] ||
 const byId = (id) => document.getElementById(id);
 function saveData() {
   try { localStorage.setItem(STORAGE_KEY,JSON.stringify(data)); }
-  catch(error) { console.error("Could not save CreditPulse data.",error); showToast("Could not save. Check device storage."); }
+  catch(error) { console.error("Could not save Pocket Plan data.",error); showToast("Could not save. Check device storage."); }
 }
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g,(char)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
